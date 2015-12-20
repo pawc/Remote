@@ -4,16 +4,16 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class ClientTest extends TestCase{
-    public ClientTest(String testName){
+public class ClientSendingTest extends TestCase{
+    public ClientSendingTest(String testName){
         super(testName);
     }
 
     public static Test suite(){
-        return new TestSuite(ClientTest.class);
+        return new TestSuite(ClientSendingTest.class);
     }
 
-    public void testClient(){
+    public void testClientSending(){
         assertTrue(true);
     }
 }

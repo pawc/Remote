@@ -10,7 +10,8 @@
   <url>kritsit.ddns.net</url>
   <modules>
     <module>Server</module>
-    <module>Client</module>
+    <module>ClientSending</module>
+    <module>ClientReceiving</module>
   </modules>
 
 <build>
