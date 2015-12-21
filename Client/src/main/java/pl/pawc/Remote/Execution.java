@@ -9,7 +9,7 @@ public class Execution {
                 StringBuffer output = new StringBuffer();
                 Process p;
                 try {
-                        p = Runtime.getRuntime().exec(command);
+                        p = Runtime.getRuntime().exec(command.split(" "));
                         p.waitFor();
                         BufferedReader reader = 
                             new BufferedReader(new InputStreamReader(p.getInputStream()));
