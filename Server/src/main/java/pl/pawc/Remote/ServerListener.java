@@ -27,6 +27,13 @@ public class ServerListener extends Thread{
         list.remove(clientConnection);
     }
 
+    public void showClients(){
+        System.out.println("Connected clients:"); 
+        for(ClientConnection clientConnection : list){
+            System.out.println(clientConnection.toString());
+        }
+    }
+
     public void sendToAll(Command command) throws IOException{
         for(ClientConnection clientConnection : list){
             clientConnection.getObjectOutputStream().writeObject(command);
@@ -42,7 +49,7 @@ public class ServerListener extends Thread{
                 Socket socket = serverSocket.accept();
                 System.out.println("New connection from "+socket.getInetAddress().toString());
                 ClientConnection clientConnection = new ClientConnection(socket, this);
-                new Thread(clientConnection).run();
+                new Thread(clientConnection).start();
                 System.out.println("Thread for the new connection started");
             }
             catch(IOException e){

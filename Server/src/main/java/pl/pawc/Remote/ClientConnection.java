@@ -5,6 +5,7 @@ import java.net.SocketException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.EOFException;
 import pl.pawc.Remote.ServerListener;
 import pl.pawc.Remote.Command;
 
@@ -16,6 +17,7 @@ public class ClientConnection extends Thread{
     private ObjectInputStream objectInputStream;
     
     public ClientConnection(Socket socket, ServerListener serverListener) throws IOException{
+        this.socket = socket;
         this.serverListener = serverListener;
         System.out.println("Creating streams...");        
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -29,27 +31,25 @@ public class ClientConnection extends Thread{
         return objectOutputStream;
     }
 
+    public String toString(){
+        return socket.getInetAddress().toString();
+    }
+
     public void run(){
-        try{
-            while(true){
+        while(true){
+            try{
                 Command command = (Command) objectInputStream.readObject();
                 System.out.println("Command received: ");
                 System.out.println(command.getCommand());
                 serverListener.sendToAll(command);
-            }            
+            }   
+            catch(IOException | NullPointerException | ClassNotFoundException e){
+                //e.printStackTrace();
+                serverListener.remove(this);
+                System.out.println("Client disconnected");
+                break;
+            }                   
         }
-        catch(IOException | NullPointerException | ClassNotFoundException e){
-            e.printStackTrace();
-            try{close();}catch(IOException f){f.printStackTrace();}
-            System.out.println("Client disconnected: "+socket.getInetAddress().toString());
-        }                   
-    }
-
-    private void close() throws IOException{
-        objectOutputStream.close();
-        objectInputStream.close();
-        socket.close();
-        serverListener.remove(this);
     }
 
 }
