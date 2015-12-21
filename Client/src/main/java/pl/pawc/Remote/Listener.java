@@ -18,14 +18,34 @@ public class Listener extends Thread{
         try{
             while(true){
                 Command command = (Command) client.read();
-                switch(command.getAuthor()){
+                switch(client.getAuthor()){
                     case "sender" :
-                            System.out.print(">");
-                            System.out.println(command.getCommand()); 
-                        break;
+                        switch(command.getAuthor()){
+                            case "sender" :
+                                System.out.print(">");
+                                System.out.println(command.getCommand()); 
+                            break;
+                            case "receiver" :
+                                System.out.print(">>");
+                                System.out.println(command.getCommand());
+                            break;
+                        }
+                    break;
                     case "receiver" :
-
-                        break;
+                        switch(command.getAuthor()){
+                            case "sender" :
+                                System.out.println(">"+command.getCommand());
+                                String result = client.execute(command.getCommand());
+                                Command reply = new Command("receiver", result);
+                                client.getObjectOutputStream().writeObject(reply);
+                                client.getObjectOutputStream().flush();
+                            break;        
+                            case "receiver" :
+                                System.out.print(">>");
+                                System.out.println(command.getCommand());
+                            break;
+                        }
+                    break;
                 }
             }           
         }

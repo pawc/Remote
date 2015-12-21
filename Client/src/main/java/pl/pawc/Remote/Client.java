@@ -1,6 +1,7 @@
 package pl.pawc.Remote;
 
 import pl.pawc.Remote.Command;
+import pl.pawc.Remote.Execution;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
@@ -67,6 +68,10 @@ public class Client{
 
     }
 
+    public String execute(String command){
+        return Execution.executeCommand(command);
+    }
+
     public String getAuthor(){
         return author;
     }
@@ -75,7 +80,7 @@ public class Client{
         return objectInputStream.readObject();
     }
     
-    private ObjectOutputStream getObjectOutputStream(){
+    public ObjectOutputStream getObjectOutputStream(){
         return objectOutputStream;
     }
 
